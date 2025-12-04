@@ -103,8 +103,9 @@
         </div>
 
         <div class="hidden md:flex bg-ios-gray/50 p-1 rounded-pill backdrop-blur-sm">
-            <button onclick="switchTab('recruitment')" id="tab-recruitment" class="px-8 py-1.5 text-sm font-medium rounded-pill transition-all duration-200 shadow-sm bg-white text-ios-text">Recruitment</button>
-            <button onclick="switchTab('scheduling')" id="tab-scheduling" class="px-8 py-1.5 text-sm font-medium rounded-pill transition-all duration-200 text-ios-subtext hover:text-ios-text">Scheduling</button>
+            <button onclick="switchTab('recruitment')" id="tab-recruitment" class="px-6 py-1.5 text-sm font-medium rounded-pill transition-all duration-200 shadow-sm bg-white text-ios-text">Recruitment</button>
+            <button onclick="switchTab('scheduling')" id="tab-scheduling" class="px-6 py-1.5 text-sm font-medium rounded-pill transition-all duration-200 text-ios-subtext hover:text-ios-text">Scheduling</button>
+            <button onclick="switchTab('dictionary')" id="tab-dictionary" class="px-6 py-1.5 text-sm font-medium rounded-pill transition-all duration-200 text-ios-subtext hover:text-ios-text">KPI Dictionary</button>
         </div>
 
         <div class="flex items-center gap-4">
@@ -204,6 +205,21 @@
                     { user: "Brenda De Leon", action: "Update Profile", time: "Today, 9:30 AM" },
                     { user: "Marlon Transport", action: "Update Profile", time: "Nov 24, 2:00 PM" }
                 ]
+            },
+            dictionary: {
+                recruitment: [
+                    { metric: "Applicants", desc: "Total unique candidates who entered the hiring pipeline.", formula: "Sum of unique Applicant IDs", source: "Hiring Totals Report.csv" },
+                    { metric: "Review Rate", desc: "% of Applicants who progressed to an Interview.", formula: "(Interviews Scheduled / Total Applicants) * 100", source: "Conversion by Team.csv" },
+                    { metric: "Pass Rate", desc: "% of Interviews that resulted in an Offer.", formula: "(Offers Extended / Interviews Completed) * 100", source: "Conversion by Team.csv" },
+                    { metric: "Offer Acceptance", desc: "% of Offers that were accepted/signed by candidates.", formula: "(Offers Signed / Offers Extended) * 100", source: "Conversion by Team.csv" },
+                    { metric: "Avg Response Time", desc: "Average time between Application Date and Interview Scheduled Date.", formula: "Avg(Interview Date - App Date)", source: "Hiring Speed Report.csv" }
+                ],
+                scheduling: [
+                    { metric: "Billable Hours", desc: "Total hours verified as billable to the client.", formula: "Sum(Billable Hours Column)", source: "ScheduledVisitReport.csv" },
+                    { metric: "Clock Compliance", desc: "% of shifts where Caregiver clocked in AND out successfully.", formula: "(Verified Shifts / Total Shifts) * 100", source: "ScheduledVisitReport.csv" },
+                    { metric: "Modification Rate", desc: "Frequency of manual schedule changes per total shifts.", formula: "(Update Events / Total Shifts) * 100", source: "Activity Log.csv" },
+                    { metric: "Missed Both", desc: "Shifts where NO clock-in or clock-out event was recorded.", formula: "Count(Missed Clock Event = 'Missed Both')", source: "ScheduledVisitReport.csv" }
+                ]
             }
         };
 
@@ -218,7 +234,7 @@
             activeTab = tab;
             
             // Tab Styles
-            const tabs = ['recruitment', 'scheduling'];
+            const tabs = ['recruitment', 'scheduling', 'dictionary'];
             tabs.forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (t === activeTab) {
@@ -274,8 +290,53 @@
         }
 
         function render() {
-            const data = dashboardData[activeTab];
             const app = document.getElementById('app');
+            chartInstances.forEach(c => c.destroy());
+            chartInstances = [];
+
+            // ---------------------
+            // Dictionary View
+            // ---------------------
+            if (activeTab === 'dictionary') {
+                const dict = dashboardData.dictionary;
+                const renderSection = (title, items) => `
+                    <div class="mb-8 animate-enter">
+                        <h3 class="text-lg font-bold text-ios-text mb-4 flex items-center gap-2">
+                            ${title === 'Recruitment' ? '<i data-lucide="users" class="w-5 h-5 text-solvo-orange"></i>' : '<i data-lucide="calendar" class="w-5 h-5 text-solvo-navy"></i>'}
+                            ${title}
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${items.map(item => `
+                                <div class="bg-ios-card p-5 rounded-widget border border-ios-border shadow-apple hover:shadow-apple-hover transition-all">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h4 class="font-bold text-ios-text text-sm">${item.metric}</h4>
+                                        <span class="text-[10px] font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded-md">Source: ${item.source}</span>
+                                    </div>
+                                    <p class="text-xs text-ios-subtext mb-3 leading-relaxed">${item.desc}</p>
+                                    <div class="bg-ios-bg p-3 rounded-lg border border-black/5">
+                                        <span class="text-[10px] font-bold text-ios-subtext uppercase tracking-wider block mb-1">Calculation</span>
+                                        <code class="text-xs text-ios-blue font-medium font-mono">${item.formula}</code>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                app.innerHTML = `
+                    <div class="max-w-4xl mx-auto">
+                        ${renderSection('Recruitment Metrics', dict.recruitment)}
+                        ${renderSection('Scheduling Metrics', dict.scheduling)}
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // ---------------------
+            // Main Dashboards
+            // ---------------------
+            const data = dashboardData[activeTab];
 
             // 1. KPIs
             const kpiHTML = data.kpis.map(k => `
@@ -453,10 +514,6 @@
         }
 
         function initCharts(data) {
-            // Destroy old charts
-            chartInstances.forEach(c => c.destroy());
-            chartInstances = [];
-
             const commonOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
