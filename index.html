@@ -91,17 +91,17 @@
     <header class="glass sticky top-0 z-50 px-6 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
             <div class="w-9 h-9 bg-black rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M4 12v12l12 6 12-6V12l-12-6zM16 30V18M28 12L16 6L4 12M4 24L16 18L28 24"/></svg>
             </div>
             <div>
-                <h1 class="font-semibold text-[15px] leading-tight text-ios-text">Solvo Global</h1>
-                <p class="text-[11px] font-medium text-ios-subtext">Synergy Homecare • Q4 2025</p>
+                <h1 class="font-semibold text-[15px] leading-tight text-ios-text">Solvo Global Performance</h1>
+                <p class="text-[11px] font-medium text-ios-subtext">Sebastian Cantera & Mariana Arevalo • Q4 2025</p>
             </div>
         </div>
 
         <div class="hidden md:flex bg-[#E5E5EA] p-[3px] rounded-lg">
-            <button onclick="switchTab('recruitment')" id="tab-recruitment" class="px-6 py-1.5 text-[13px] font-medium rounded-[6px] transition-all shadow-sm bg-white text-ios-text">Recruitment</button>
-            <button onclick="switchTab('scheduling')" id="tab-scheduling" class="px-6 py-1.5 text-[13px] font-medium rounded-[6px] transition-all text-ios-subtext hover:text-ios-text">Scheduling</button>
+            <button onclick="switchTab('recruitment')" id="tab-recruitment" class="px-6 py-1.5 text-[13px] font-medium rounded-[6px] transition-all shadow-sm bg-white text-ios-text">Recruitment (Mariana)</button>
+            <button onclick="switchTab('scheduling')" id="tab-scheduling" class="px-6 py-1.5 text-[13px] font-medium rounded-[6px] transition-all text-ios-subtext hover:text-ios-text">Scheduling (Sebastian)</button>
             <button onclick="switchTab('dictionary')" id="tab-dictionary" class="px-6 py-1.5 text-[13px] font-medium rounded-[6px] transition-all text-ios-subtext hover:text-ios-text">KPI Dictionary</button>
         </div>
 
@@ -119,7 +119,7 @@
 
     <script>
         // ---------------------------------------------------------
-        // DATA STORE (100% Verified Data from CSV Analysis)
+        // DATA STORE (100% Verified Data from CSV Analysis, Non-Monetary)
         // ---------------------------------------------------------
         const dataStore = {
             recruitment: {
@@ -145,8 +145,8 @@
                     { name: "Backup Childcare", val: 11, pct: 23 } // Verified from job breakdown
                 ],
                 insights: [
-                    { type: "critical", title: "100% Onboarding Leakage", text: "The process is failing between Offer Acceptance and Hired. Immediate audit of the 'Documents Signed' stage (9 candidates) is critical." }, 
-                    { type: "success", title: "High Funnel Speed", text: "Average time from application to interview is 1.0 day, indicating fast initial screening." },
+                    { type: "critical", title: "100% Onboarding Leakage", text: "Mariana's funnel is failing between Offer Acceptance and Hired. Immediate audit of the 'Documents Signed' stage (9 candidates) is critical." }, 
+                    { type: "success", title: "High Funnel Speed", text: "Mariana achieved an average time from application to interview of 1.0 day, indicating fast initial screening." },
                     { type: "info", title: "Interview Quality", text: "Interview Success Rate (Offer/Interview) is 96.3%, indicating strong candidate quality at the interview stage." }
                 ],
                 goals: [
@@ -157,14 +157,14 @@
             },
             scheduling: {
                 kpis: [
-                    // Verified: SUM(Billable Hours) = 4261.1
-                    { label: "Total Billable Hours", value: "4,261.1h", sub: "Q4 Production", trend: "up", color: "blue", icon: "clock" }, 
+                    // Verified: Count of total shifts = 1461
+                    { label: "Total Shifts Scheduled", value: "1,461", sub: "Q4 Schedule Volume", trend: "up", color: "blue", icon: "calendar-check" }, 
                     // Verified: 66.6% (973 Verified / 1461 Shifts)
                     { label: "Shift Compliance Rate", value: "66.6%", sub: "Verified Clocks", trend: "down", color: "red", icon: "shield-alert" }, 
-                    // Verified: 1211.8 hours (454 missed clocks * 2.67 avg shift)
-                    { label: "Unverified Revenue Risk Hours", value: "1,211.8h", sub: "Potential Lost Revenue", trend: "danger", color: "orange", icon: "dollar-sign" }, 
+                    // Verified: 454 shifts missed both clocks
+                    { label: "Total Unverified Shifts", value: "454", sub: "Shifts Missing Data", trend: "danger", color: "orange", icon: "alert-triangle" }, 
                     // Verified: 184 Modifications / 1461 Shifts = 12.6%
-                    { label: "Schedule Change Rate (Admin Burden)", value: "12.6%", sub: "Manual Intervention", trend: "neutral", color: "indigo", icon: "settings-2" } 
+                    { label: "Schedule Change Rate (Admin Burden)", value: "12.6%", sub: "Manual Intervention Rate", trend: "neutral", color: "indigo", icon: "settings-2" } 
                 ],
                 stats: {
                     shifts: 1461, // Verified Total Shifts
@@ -180,22 +180,21 @@
                 service_mix: [828, 536, 30, 24, 13, 13], // Top 6 services verified counts
                 service_labels: ['Personal Care', 'sv15', 'BackupCare SC', 'Transportation', 'Training', 'Backup care SC'], 
                 insights: [
-                    { type: "critical", title: "Compliance is the Top Priority", text: "33.4% of shifts are non-compliant, directly resulting in 1,211.8 hours of revenue risk." }, 
-                    { type: "warning", title: "High Admin Cost", text: "A 12.6% Schedule Change Rate means one in eight shifts requires manual administrative intervention." }, 
-                    { type: "info", title: "Service Mix Skew", text: "Personal Care shifts (828) dominate the volume, highlighting service focus." }
+                    { type: "critical", title: "Compliance is Sebastian's Top Priority", text: "33.4% of shifts (454 total) are non-compliant, indicating a major failure in clock verification." }, 
+                    { type: "warning", title: "High Admin Cost", text: "Sebastian has a 12.6% Schedule Change Rate, meaning one in eight shifts requires manual administrative intervention." }, 
+                    { type: "info", title: "Service Mix Skew", text: "Personal Care shifts (828) dominate the volume Sebastian schedules, highlighting service focus." }
                 ],
                 goals: [
-                    { label: "Billable Hours", current: 4261.1, target: 5000, unit: "h" },
+                    { label: "Total Shifts Scheduled", current: 1461, target: 1600, unit: "" },
                     { label: "Shift Compliance Rate", current: 66.6, target: 80.0, unit: "%" }, // Goal: Improve compliance
                     { label: "Schedule Change Rate", current: 12.6, target: 10.0, unit: "%", reverse: true } // Goal: Reduce admin burden
                 ]
             },
             dictionary: [
-                { term: "App → Interview Conversion", def: "Percentage of applicants who are moved to the interview stage.", calc: "(Interviews / Applicants) * 100", src: "Conversion Report" },
-                { term: "Offer to Hire Failure", def: "Percentage of signed offers that fail to result in a hire (onboarding failure).", calc: "((Offers Signed - Hires) / Offers Signed) * 100", src: "Hiring Totals" },
-                { term: "Shift Compliance Rate", def: "Percentage of total shifts with both clock-in and clock-out events verified.", calc: "(Verified Shifts / Total Shifts) * 100", src: "Visit Report" },
-                { term: "Unverified Revenue Risk Hours", def: "Estimated scheduled hours that cannot be billed due to missed clock events.", calc: "Missed Events * Avg Scheduled Hours (2.67h)", src: "Visit Report" },
-                { term: "Schedule Change Rate (Admin Burden)", def: "Rate of manual interventions (Update, Delete, Move, etc.) versus total shifts.", calc: "(Modification Activities / Total Shifts) * 100", src: "Activity Log / Visit Report" }
+                { term: "App → Interview Conversion", def: "Percentage of applicants who are moved to the interview stage. (Mariana's Efficiency)", calc: "(Interviews / Applicants) * 100", src: "Conversion Report" },
+                { term: "Offer to Hire Failure", def: "Percentage of signed offers that fail to result in a hire (onboarding failure). (Mariana's Leakage)", calc: "((Offers Signed - Hires) / Offers Signed) * 100", src: "Hiring Totals" },
+                { term: "Shift Compliance Rate", def: "Percentage of total shifts with both clock-in and clock-out events verified. (Sebastian's Adherence)", calc: "(Verified Shifts / Total Shifts) * 100", src: "Visit Report" },
+                { term: "Schedule Change Rate (Admin Burden)", def: "Rate of manual interventions (Update, Delete, Move, etc.) versus total shifts. (Sebastian's Efficiency)", calc: "(Modification Activities / Total Shifts) * 100", src: "Activity Log / Visit Report" }
             ]
         };
 
@@ -259,7 +258,7 @@
                 chartsHTML = `
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                         <div class="lg:col-span-2 bg-white rounded-sq p-6 shadow-widget border border-black/5 animate-in delay-1">
-                            <h3 class="text-[15px] font-semibold text-ios-text mb-6">Hiring Funnel Performance (${data.stats.apps} Total Applications)</h3>
+                            <h3 class="text-[15px] font-semibold text-ios-text mb-6">Mariana's Hiring Funnel (${data.stats.apps} Total Applications)</h3>
                             <div class="h-[280px]">
                                 <canvas id="mainChart"></canvas>
                             </div>
@@ -287,7 +286,7 @@
                 chartsHTML = `
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                         <div class="lg:col-span-2 bg-white rounded-sq p-6 shadow-widget border border-black/5 animate-in delay-1">
-                            <h3 class="text-[15px] font-semibold text-ios-text mb-6">Clock Event Breakdown (${data.stats.shifts} Total Shifts)</h3>
+                            <h3 class="text-[15px] font-semibold text-ios-text mb-6">Sebastian's Clock Event Breakdown (${data.stats.shifts} Total Shifts)</h3>
                             <div class="h-[280px]">
                                 <canvas id="mainChart"></canvas>
                             </div>
