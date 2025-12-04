@@ -3,663 +3,618 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solvo Global | Synergy Homecare Dashboard</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Solvo Global Dashboard (Q4 2025)</title>
+    <style>
+        :root {
+            --primary: #007bff;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --border-color: #e9ecef;
+            --card-bg: white;
+        }
 
-    <script src="https://cdn.tailwindcss.com"></script>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+        header {
+            background-color: var(--card-bg);
+            padding: 20px 30px;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        solvo: { orange: '#F36F21', navy: '#002F5D' },
-                        apple: {
-                            bg: '#F5F5F7', 
-                            card: '#FFFFFF', 
-                            border: 'rgba(0, 0, 0, 0.04)', // Much subtler border
-                            text: '#1D1D1F', 
-                            subtext: '#86868B', 
-                            blue: '#007AFF', // Genuine iOS Blue
-                            red: '#FF3B30', 
-                            green: '#34C759', 
-                            orange: '#FF9500',
-                            purple: '#AF52DE',
-                            teal: '#5AC8FA'
-                        },
-                    },
-                    fontFamily: { sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'] },
-                    boxShadow: {
-                        // iOS diffuse shadow
-                        'ios': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                        'ios-hover': '0 8px 30px -4px rgba(0, 0, 0, 0.08)',
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
-                    },
-                    borderRadius: {
-                        'ios': '1.25rem', // ~20px for that smooth widget look
-                    }
-                }
+        header h1 {
+            color: var(--dark);
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            color: var(--secondary);
+            font-size: 1.1em;
+            margin: 0;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .main-grid {
+                grid-template-columns: 1fr;
             }
         }
-    </script>
 
-    <style>
-        body {
-            background-color: #F5F5F7;
-            color: #1D1D1F;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border-top: 5px solid var(--info);
+        }
+
+        .scheduling-section .section-card { border-top-color: var(--success); }
+        .recruitment-section .section-card { border-top-color: var(--primary); }
+
+        h2 {
+            color: var(--dark);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
         }
         
-        /* Apple-style Glassmorphism Header */
-        header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+        h3 {
+            color: var(--dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
         }
 
-        /* Smooth Chart transitions */
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .kpi-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+
+        .kpi-subvalue {
+            font-size: 0.8em;
+            color: var(--secondary);
+            display: block;
+            margin-top: 5px;
+        }
+
+        .trend-icon {
+            margin-left: 5px;
+        }
+
+        .trend-icon.up { color: var(--success); }
+        .trend-icon.down { color: var(--danger); }
+        .trend-icon.neutral { color: var(--secondary); }
+
+        /* Insights */
+        .ai-insights {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .ai-insights.danger { background-color: #f8d7da; color: var(--danger); border: 1px solid #f5c6cb; }
+        .ai-insights.warning { background-color: #fff3cd; color: var(--warning); border: 1px solid #ffeeba; }
+        .ai-insights.info, .ai-insights.up, .ai-insights.neutral { background-color: #d1ecf1; color: var(--info); border: 1px solid #bee5eb; }
+
+        /* Lists/Breakdowns */
+        .breakdown-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .breakdown-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.95em;
+        }
+
+        .breakdown-list li:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            font-weight: bold;
         }
         
-        /* SVG Ring Animation */
-        .progress-ring__circle {
-            transition: stroke-dashoffset 0.6s ease-out;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
+        /* Funnel */
+        .funnel-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        /* Table styling refinements */
-        th { font-weight: 500; letter-spacing: 0.02em; }
-        td { padding-top: 1rem; padding-bottom: 1rem; }
+        .funnel-step {
+            background-color: var(--info);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .funnel-step:nth-child(1) { background-color: var(--primary); }
+        .funnel-step:nth-child(2) { background-color: #20c997; } /* Teal */
+        .funnel-step:nth-child(3) { background-color: #fd7e14; } /* Orange */
+        .funnel-step:nth-child(4) { background-color: var(--success); }
+        
+        /* Performance Goals Table */
+        .goals-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .goals-table th, .goals-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+        .goals-table th {
+            background-color: var(--light);
+        }
+        .goals-table .status-on-track { background-color: #e6ffed; color: var(--success); font-weight: bold; }
+        .goals-table .status-behind { background-color: #fce4e6; color: var(--danger); font-weight: bold; }
+        .goals-table .current-val { font-weight: bold; }
+
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body>
 
-    <header class="sticky top-0 z-50 px-6 py-3 flex items-center justify-between transition-all duration-300">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-gradient-to-br from-solvo-orange to-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                S
-            </div>
-            <div>
-                <h1 class="font-semibold text-base leading-tight text-solvo-navy tracking-tight">Solvo Global</h1>
-                <p class="text-[10px] font-medium text-apple-subtext uppercase tracking-wider">Synergy Dashboard</p>
-            </div>
-        </div>
-
-        <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 bg-[#E3E3E8] p-1 rounded-full items-center">
-            <div class="relative flex">
-                <button onclick="switchTab('recruitment')" id="tab-recruitment" class="relative z-10 px-8 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ease-out">Recruitment</button>
-                <button onclick="switchTab('scheduling')" id="tab-scheduling" class="relative z-10 px-8 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ease-out text-apple-subtext">Scheduling</button>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-5">
-            <button class="text-apple-subtext hover:text-solvo-orange transition-colors"><i data-lucide="search" class="w-5 h-5 stroke-[2]"></i></button>
-            <button class="relative text-apple-subtext hover:text-solvo-orange transition-colors group">
-                <i data-lucide="bell" class="w-5 h-5 stroke-[2]"></i>
-                <span class="absolute top-0.5 right-0.5 w-2 h-2 bg-apple-red rounded-full border border-white"></span>
-            </button>
-            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-gray-200 to-gray-100 p-[2px] cursor-pointer hover:shadow-md transition-shadow">
-                <img src="https://ui-avatars.com/api/?name=JS&background=002F5D&color=fff&font-size=0.4" class="rounded-full w-full h-full object-cover" alt="User">
-            </div>
-        </div>
+<div class="container">
+    <header>
+        <h1 id="dashboard-title">Solvo Global Dashboard</h1>
+        <p id="dashboard-date-range">Loading Date Range...</p>
     </header>
 
-    <main class="flex-1 w-full max-w-[1400px] mx-auto p-4 md:p-8 space-y-8" id="app">
-        </main>
-
-    <footer class="mt-auto py-8 text-center border-t border-gray-200/60 bg-white/50 backdrop-blur-sm">
-        <p class="text-xs text-apple-subtext font-medium tracking-wide">
-            &copy; 2025 Created by <span class="text-apple-text font-semibold">Juan Sebastian Belalcazar</span> at 
-            <a href="https://solvoglobal.com" target="_blank" class="text-solvo-orange hover:underline decoration-solvo-orange/30 underline-offset-2">Solvoglobal.com</a> 
-            for <span class="text-solvo-navy font-semibold">Synergy Homecare</span>
-        </p>
-    </footer>
-
-    <script>
-        // ---------------------------------------------------------
-        // Data Structure
-        // ---------------------------------------------------------
-        const dashboardData = {
-          "recruitment": {
-            "summary_kpis": {
-              "review_rate": { "value": "92%", "subValue": "Applicants Processed", "target": "90%", "trend": "up" },
-              "interview_pass_rate": { "value": "96%", "subValue": "Offer / Interview", "target": "75%", "trend": "up" },
-              "offer_acceptance_rate": { "value": "35%", "subValue": "Signed / Offered", "target": "50%", "trend": "neutral" }
-            },
-            "original_stats": {
-              "unreviewed_applicants": { "value": "31", "subValue": "Action Required" },
-              "interviews_scheduled": { "value": "8", "subValue": "By Mariana Arévalo" },
-              "pending_onboarding": { "value": "9", "subValue": "Documents Signed" },
-              "avg_response_time": { "value": "24h", "subValue": "Caregiver Role" }
-            },
-            "performance_goals": [
-              { "label": "Interviews", "current": 8, "target": 15, "unit": "", "status": "behind" },
-              { "label": "Onboarding", "current": 9, "target": 5, "unit": "", "status": "on-track" },
-              { "label": "Response Time", "current": 24, "target": 12, "unit": "h", "status": "behind", "reverse": true }
-            ],
-            "ai_insights": [
-              { "type": "success", "text": "Interview Pass Rate is exceptional (96%). Candidate quality is currently high." },
-              { "type": "warning", "text": "Offer Acceptance (35%) is below target. Review competitive compensation." },
-              { "type": "info", "text": "Caregiver role has the highest volume but slowest response time (24h)." }
-            ],
-            "funnel": [
-              { "step": "Applicants", "value": 48 },
-              { "step": "Interviews", "value": 27 }, 
-              { "step": "Offers", "value": 26 }, 
-              { "step": "Hires", "value": 0 }
-            ],
-            "weekly_trends": [
-              { "date": "09/28", "applications": 2 },
-              { "date": "10/05", "applications": 10 },
-              { "date": "10/12", "applications": 5 },
-              { "date": "10/19", "applications": 7 },
-              { "date": "10/26", "applications": 10 },
-              { "date": "11/02", "applications": 6 },
-              { "date": "11/09", "applications": 3 },
-              { "date": "11/16", "applications": 1 },
-              { "date": "11/23", "applications": 2 },
-              { "date": "11/30", "applications": 1 }
-            ],
-            "status_breakdown": [
-              { "status": "Sent Documents", "count": 12 },
-              { "status": "Docs Signed", "count": 9 },
-              { "status": "Contact Attempted", "count": 7 },
-              { "status": "In Communication", "count": 7 },
-              { "status": "New", "count": 4 },
-              { "status": "Interview Set", "count": 2 },
-              { "status": "3rd Contact", "count": 2 },
-              { "status": "Other", "count": 4 }
-            ],
-            "role_efficiency": {
-              "breakdown": [
-                { "role": "Caregiver", "hours": 24.0, "applicants": 24, "emails": 59, "texts": 53 },
-                { "role": "Backup Childcare Provider", "hours": 617.4, "applicants": 46, "emails": 10, "texts": 60 }
-              ],
-              "total": { "role": "Total", "hours": 419.6, "applicants": 70, "emails": 69, "texts": 113 }
-            }
-          },
-          "scheduling": {
-            "summary_kpis": {
-              "clock_compliance": { "value": "66%", "subValue": "Verified Events", "target": "95%", "trend": "down" },
-              "modification_rate": { "value": "29%", "subValue": "Schedule Changes", "target": "15%", "trend": "up" },
-              "service_distribution": { "value": "70%", "subValue": "Personal Care Mix", "trend": "neutral" }
-            },
-            "original_stats": {
-              "total_shifts": { "value": "486", "subValue": "Q4 2025" },
-              "schedule_modifications": { "value": "142", "subValue": "Shift Updates" },
-              "billable_hours": { "value": "3,240", "subValue": "Hours Verified" },
-              "avg_hours_per_shift": { "value": "6.7h", "subValue": "Avg Duration"} 
-            },
-            "performance_goals": [
-               { "label": "Billable Hours", "current": 3240, "target": 3000, "unit": "h", "status": "on-track" },
-               { "label": "Total Shifts", "current": 486, "target": 450, "unit": "", "status": "on-track" },
-               { "label": "Missed Clocks", "current": 166, "target": 50, "unit": "", "status": "behind", "reverse": true }
-            ],
-            "ai_insights": [
-              { "type": "danger", "text": "Critical: 110 'Missed Both' clock events detected. Compliance risk is elevated." },
-              { "type": "success", "text": "Billable hours are trending up (+12% vs last month)." },
-              { "type": "info", "text": "Personal Care accounts for 70% of all scheduled shifts." }
-            ],
-            "service_mix": [
-              { "status": "Personal Care", "count": 340 },
-              { "status": "Backup Care", "count": 95 },
-              { "status": "Transportation", "count": 35 },
-              { "status": "Training", "count": 16 }
-            ],
-            "clock_compliance_breakdown": [
-              { "status": "Verified", "count": 320 },
-              { "status": "Missed Both", "count": 110 },
-              { "status": "Missed Out", "count": 32 },
-              { "status": "Missed In", "count": 24 }
-            ],
-            "activity_log": [
-              { "date": "11/28", "action": "Create profile", "detail": "MOERSCHELL, ADAM" },
-              { "date": "11/26", "action": "Create profile", "detail": "De Leon, Brenda" },
-              { "date": "11/24", "action": "Update profile", "detail": "Transport, Marlon" }
-            ]
-          }
-        };
-
-        // Fix for inconsistent data
-        if(typeof dashboardData.scheduling.original_stats.avg_hours_per_shift === 'string') {
-            dashboardData.scheduling.original_stats.avg_hours_per_shift = {
-                value: dashboardData.scheduling.original_stats.avg_hours_per_shift,
-                subValue: "Shift Average"
-            };
-        }
-
-        // ---------------------------------------------------------
-        // Core Logic
-        // ---------------------------------------------------------
-        let activeTab = 'recruitment';
-        const app = document.getElementById('app');
-        let chartInstances = [];
-
-        function switchTab(tab) {
-            activeTab = tab;
-            
-            // iOS Tab Logic
-            const rTab = document.getElementById('tab-recruitment');
-            const sTab = document.getElementById('tab-scheduling');
-            
-            if (tab === 'recruitment') {
-                rTab.classList.add('bg-white', 'text-apple-text', 'shadow-sm');
-                rTab.classList.remove('text-apple-subtext');
-                sTab.classList.remove('bg-white', 'text-apple-text', 'shadow-sm');
-                sTab.classList.add('text-apple-subtext');
-            } else {
-                sTab.classList.add('bg-white', 'text-apple-text', 'shadow-sm');
-                sTab.classList.remove('text-apple-subtext');
-                rTab.classList.remove('bg-white', 'text-apple-text', 'shadow-sm');
-                rTab.classList.add('text-apple-subtext');
-            }
-
-            renderDashboard();
-        }
-
-        // ---------------------------------------------------------
-        // UI Components
-        // ---------------------------------------------------------
-        function getTrendIcon(trend) {
-            if (trend === 'up') return `<div class="bg-apple-green/10 text-apple-green w-6 h-6 rounded-full flex items-center justify-center"><i data-lucide="trending-up" class="w-3.5 h-3.5"></i></div>`;
-            if (trend === 'down') return `<div class="bg-apple-red/10 text-apple-red w-6 h-6 rounded-full flex items-center justify-center"><i data-lucide="trending-down" class="w-3.5 h-3.5"></i></div>`;
-            return `<div class="bg-gray-100 text-apple-subtext w-6 h-6 rounded-full flex items-center justify-center"><i data-lucide="minus" class="w-3.5 h-3.5"></i></div>`;
-        }
-
-        function calculateRing(current, target, reverse = false) {
-            const percent = Math.min((current / target) * 100, 100);
-            const circumference = 2 * Math.PI * 18;
-            const offset = circumference - (percent / 100) * circumference;
-            let color = 'text-apple-blue';
-            
-            if (!reverse) {
-                if (percent >= 100) color = 'text-apple-green';
-                else if (percent >= 70) color = 'text-apple-orange';
-                else color = 'text-apple-red';
-            } else {
-                 if (current > target) color = 'text-apple-red';
-                 else color = 'text-apple-green';
-            }
-            return { offset, color, percent: Math.round(percent) };
-        }
-
-        // ---------------------------------------------------------
-        // Rendering
-        // ---------------------------------------------------------
-        function renderDashboard() {
-            chartInstances.forEach(c => c.destroy());
-            chartInstances = [];
-            const data = dashboardData[activeTab];
-
-            // 1. KPI Cards (iOS Widgets)
-            const kpiHTML = Object.entries(data.summary_kpis).map(([key, item]) => `
-                <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border flex flex-col justify-between hover:shadow-ios-hover transition-shadow duration-300">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-xs font-semibold text-apple-subtext uppercase tracking-widest">${key.replace(/_/g, ' ')}</span>
-                        ${getTrendIcon(item.trend)}
-                    </div>
-                    <div>
-                        <div class="text-3xl font-bold text-apple-text tracking-tight mb-1">${item.value}</div>
-                        <div class="flex items-center gap-2">
-                             <span class="text-sm text-apple-subtext font-medium">${item.subValue}</span>
-                        </div>
-                        ${item.target ? `<div class="mt-3 text-xs font-medium text-apple-blue/80 bg-apple-blue/5 inline-block px-2 py-1 rounded-lg">Goal: ${item.target}</div>` : ''}
-                    </div>
-                </div>
-            `).join('');
-
-            // 2. Stats Grid (Square Widgets)
-            const statsHTML = Object.entries(data.original_stats).map(([key, item]) => `
-                <div class="bg-apple-card rounded-ios p-5 shadow-ios border border-apple-border flex flex-col justify-between h-32 hover:translate-y-[-2px] transition-transform duration-300">
-                    <div class="flex items-start justify-between">
-                        <div class="w-8 h-8 rounded-full bg-[#F2F2F7] flex items-center justify-center text-apple-text/70">
-                            <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-solvo-navy tracking-tight">${item.value}</div>
-                        <div class="text-[11px] text-apple-subtext font-semibold uppercase tracking-wide truncate mt-1">${item.subValue}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            // 3. Tab Specific Content
-            let mainLeftHTML = '';
-            
-            if (activeTab === 'recruitment') {
-                mainLeftHTML = `
-                    <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border mb-8">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-apple-text tracking-tight">Application Volume</h3>
-                            <select class="text-xs bg-gray-100 border-none rounded-lg px-2 py-1 text-apple-subtext font-medium focus:ring-0 cursor-pointer">
-                                <option>This Quarter</option>
-                            </select>
-                        </div>
-                        <div class="h-72 w-full">
-                            <canvas id="trendChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border">
-                            <h3 class="text-base font-semibold text-apple-text mb-6">Hiring Funnel</h3>
-                            <div class="h-56 relative">
-                                <canvas id="funnelChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border">
-                            <h3 class="text-base font-semibold text-apple-text mb-6">Status Breakdown</h3>
-                            <div class="h-56 relative flex items-center justify-center">
-                                <canvas id="statusChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-apple-card rounded-ios shadow-ios border border-apple-border overflow-hidden">
-                        <div class="p-6 border-b border-gray-100">
-                            <h3 class="text-base font-semibold text-apple-text">Role Efficiency</h3>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead class="bg-gray-50/50 text-xs text-apple-subtext uppercase tracking-wider">
-                                    <tr>
-                                        <th class="p-5 pl-6 font-semibold">Role</th>
-                                        <th class="p-5 font-semibold">Hours</th>
-                                        <th class="p-5 font-semibold">Applicants</th>
-                                        <th class="p-5 font-semibold">Emails</th>
-                                        <th class="p-5 font-semibold">Texts</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100 text-sm text-apple-text">
-                                    ${data.role_efficiency.breakdown.map(r => `
-                                        <tr class="hover:bg-gray-50/80 transition-colors">
-                                            <td class="p-5 pl-6 font-medium">${r.role}</td>
-                                            <td class="p-5 text-apple-subtext font-mono">${r.hours}</td>
-                                            <td class="p-5 font-mono">${r.applicants}</td>
-                                            <td class="p-5 font-mono">${r.emails}</td>
-                                            <td class="p-5 font-mono">${r.texts}</td>
-                                        </tr>
-                                    `).join('')}
-                                    <tr class="bg-gray-50/50 font-semibold">
-                                        <td class="p-5 pl-6 text-solvo-navy">Total</td>
-                                        <td class="p-5 text-solvo-orange font-mono">${data.role_efficiency.total.hours}</td>
-                                        <td class="p-5 font-mono">${data.role_efficiency.total.applicants}</td>
-                                        <td class="p-5 font-mono">${data.role_efficiency.total.emails}</td>
-                                        <td class="p-5 font-mono">${data.role_efficiency.total.texts}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
-            } else {
-                mainLeftHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border">
-                            <h3 class="text-base font-semibold text-apple-text mb-6">Service Mix</h3>
-                            <div class="h-64 relative">
-                                <canvas id="serviceChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border">
-                            <h3 class="text-base font-semibold text-apple-text mb-6">Clock Compliance</h3>
-                            <div class="h-64 relative">
-                                <canvas id="complianceChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-apple-card rounded-ios shadow-ios border border-apple-border overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                            <h3 class="text-base font-semibold text-apple-text">Recent Activity</h3>
-                        </div>
-                        <div class="divide-y divide-gray-100">
-                            ${data.activity_log.map(log => `
-                                <div class="p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors group">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-blue-50 text-apple-blue flex items-center justify-center group-hover:bg-apple-blue group-hover:text-white transition-colors">
-                                            <i data-lucide="file-text" class="w-5 h-5"></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-semibold text-apple-text">${log.action}</div>
-                                            <div class="text-xs text-apple-subtext mt-0.5">${log.detail}</div>
-                                        </div>
-                                    </div>
-                                    <div class="text-xs text-apple-subtext font-medium bg-gray-100 px-2 py-1 rounded-md">${log.date}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            // 4. Sidebar Components
-            const goalsHTML = data.performance_goals.map(goal => {
-                const ring = calculateRing(goal.current, goal.target, goal.reverse);
-                return `
-                <div class="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl mb-3 border border-transparent hover:border-gray-200 transition-colors">
-                    <div>
-                        <div class="text-sm font-semibold text-apple-text mb-1">${goal.label}</div>
-                        <div class="text-xs text-apple-subtext font-medium">${goal.current} / ${goal.target} ${goal.unit}</div>
-                    </div>
-                    <div class="relative w-12 h-12">
-                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 40 40">
-                            <circle class="text-gray-200" stroke-width="4" stroke="currentColor" fill="transparent" r="16" cx="20" cy="20" />
-                            <circle class="${ring.color} progress-ring__circle" stroke-width="4" stroke-dasharray="100" stroke-dashoffset="${100 - ring.percent}" stroke-linecap="round" stroke="currentColor" fill="transparent" r="16" cx="20" cy="20" />
-                        </svg>
-                    </div>
-                </div>`;
-            }).join('');
-
-            const insightsHTML = data.ai_insights.map(insight => {
-                let colorClass = insight.type === 'success' ? 'bg-green-50 text-green-700 border-green-100' :
-                                 insight.type === 'danger' ? 'bg-red-50 text-red-700 border-red-100' :
-                                 'bg-blue-50 text-blue-700 border-blue-100';
-                let icon = insight.type === 'success' ? 'check-circle' : insight.type === 'danger' ? 'alert-triangle' : 'info';
+    <div class="main-grid">
+        <div class="scheduling-section">
+            <div class="section-card">
+                <h2 id="scheduling-title">📊 Scheduling Performance (Q4 2025)</h2>
                 
-                return `
-                <div class="p-4 rounded-2xl border mb-3 flex gap-3 items-start ${colorClass}">
-                    <i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0 mt-0.5 opacity-80"></i>
-                    <p class="text-xs font-medium leading-relaxed opacity-90">${insight.text}</p>
-                </div>`;
-            }).join('');
-
-            // Assemble DOM
-            app.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
-                    ${kpiHTML}
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up">
-                    ${statsHTML}
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 space-y-8">
-                        ${mainLeftHTML}
+                <h3>Summary KPIs</h3>
+                <div class="kpi-grid" id="scheduling-summary-kpis">
                     </div>
-                    <div class="space-y-8">
-                        <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border">
-                            <div class="flex items-center gap-2 mb-6">
-                                <div class="bg-solvo-orange/10 p-1.5 rounded-lg"><i data-lucide="target" class="w-4 h-4 text-solvo-orange"></i></div>
-                                <h3 class="text-base font-semibold text-apple-text">Goals</h3>
-                            </div>
-                            <div>${goalsHTML}</div>
-                        </div>
 
-                        <div class="bg-apple-card rounded-ios p-6 shadow-ios border border-apple-border">
-                            <div class="flex items-center gap-2 mb-6">
-                                <div class="bg-solvo-navy/10 p-1.5 rounded-lg"><i data-lucide="sparkles" class="w-4 h-4 text-solvo-navy"></i></div>
-                                <h3 class="text-base font-semibold text-apple-text">Insights</h3>
-                            </div>
-                            <div>${insightsHTML}</div>
-                        </div>
+                <h3>Key Statistics</h3>
+                <div class="kpi-grid" id="scheduling-original-stats">
                     </div>
+                
+                <h3>Performance Goals</h3>
+                <table class="goals-table" id="scheduling-goals-table">
+                    <thead>
+                        <tr><th>Metric</th><th>Current</th><th>Target</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="section-card">
+                <h3>Clock Compliance & Service Mix</h3>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h4>Clock Breakdown</h4>
+                        <ul class="breakdown-list" id="scheduling-clock-breakdown">
+                            </ul>
+                    </div>
+                    <div style="flex: 1;">
+                        <h4>Service Mix Distribution</h4>
+                        <ul class="breakdown-list" id="scheduling-service-mix">
+                            </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h3>AI Insights & Activity Log</h3>
+                <div id="scheduling-ai-insights">
+                    </div>
+                
+                <h4>Recent Activity Log (Updates)</h4>
+                <ul class="breakdown-list" id="scheduling-activity-log">
+                    </ul>
+            </div>
+        </div>
+
+        <div class="recruitment-section">
+            <div class="section-card">
+                <h2 id="recruitment-title">🎯 Recruitment & Hiring Funnel</h2>
+                
+                <h3>Conversion KPIs</h3>
+                <div class="kpi-grid" id="recruitment-summary-kpis">
+                    </div>
+
+                <h3>Recruitment Funnel (Applicants to Hires)</h3>
+                <div class="funnel-container" id="recruitment-funnel">
+                    </div>
+                
+                <h3>Key Statistics & Response Time</h3>
+                <div class="kpi-grid" id="recruitment-original-stats">
+                    </div>
+            </div>
+            
+            <div class="section-card">
+                <h3>Current Applicant Status</h3>
+                <ul class="breakdown-list" id="recruitment-status-breakdown">
+                    </ul>
+
+                <h3>Performance Goals</h3>
+                <table class="goals-table" id="recruitment-goals-table">
+                    <thead>
+                        <tr><th>Metric</th><th>Current</th><th>Target</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="section-card">
+                <h3>AI Insights</h3>
+                <div id="recruitment-ai-insights">
+                    </div>
+                
+                <h3>Applications Per Week (Trend)</h3>
+                <div id="recruitment-weekly-trends">
+                    <p style="text-align: center; color: var(--secondary);">Weekly trend data is present in the object, replace this with a Chart.js or similar chart implementation.</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ----------------------------------------------------
+    // FULL UPDATED DASHBOARD DATA OBJECT
+    // ----------------------------------------------------
+    var dashboardData = {
+      "header": {
+        "title": "Solvo Global Dashboard (Q4 2025)",
+        "date_range": "October 1st - December 3rd, 2025",
+        "main_kpis": [
+          { "label": "Total Billable Hours", "value": "2,473.4", "trend": "neutral" },
+          { "label": "Total Applicants", "value": "48", "trend": "up" },
+          { "label": "Clock Compliance", "value": "65.8%", "trend": "down" }
+        ]
+      },
+      "scheduling": {
+        "summary_kpis": {
+          "clock_compliance": { "value": "65.8%", "subValue": "Verified Events", "target": "95%", "trend": "down" },
+          "modification_rate": { "value": "29.2%", "subValue": "Schedule Changes", "target": "15%", "trend": "up" },
+          "service_distribution": { "value": "69.9%", "subValue": "Personal Care Mix", "trend": "neutral" }
+        },
+        "original_stats": {
+          "total_shifts": { "value": "486", "subValue": "Q4 2025" },
+          "schedule_modifications": { "value": "142", "subValue": "Shift Updates" },
+          "billable_hours": { "value": "2,473.4", "subValue": "Hours Verified" },
+          "avg_hours_per_shift": { "value": "5.09h", "subValue": "Shift Average"}
+        },
+        "performance_goals": [
+           { "label": "Billable Hours", "current": 2473.4, "target": 3000, "unit": "h", "status": "behind" },
+           { "label": "Total Shifts", "current": 486, "target": 450, "unit": "", "status": "on-track" },
+           { "label": "Missed Clocks", "current": 166, "target": 50, "unit": "", "status": "behind", "reverse": true }
+        ],
+        "ai_insights": [
+          { "type": "danger", "text": "Critical: 110 'Missed Both' clock events detected. Compliance risk is elevated." },
+          { "type": "warning", "text": "Billable hours are currently below the Q4 target of 3,000h." },
+          { "type": "info", "text": "Personal Care accounts for 69.9% of all scheduled shifts." }
+        ],
+        "service_mix": [
+          { "status": "Personal Care", "count": 340 },
+          { "status": "Backup Care", "count": 95 },
+          { "status": "Transportation", "count": 35 },
+          { "status": "Training", "count": 16 }
+        ],
+        "clock_compliance_breakdown": [
+          { "status": "Verified", "count": 320 },
+          { "status": "Missed Both", "count": 110 },
+          { "status": "Missed Out", "count": 32 },
+          { "status": "Missed In", "count": 24 }
+        ],
+        "activity_log": [
+          { "date": "12/02/25", "action": "Update profile", "detail": "Micah (Vivvi) Wilson" },
+          { "date": "12/02/25", "action": "Update profile", "detail": "De Leon, Brenda" },
+          { "date": "11/24/25", "action": "Update profile", "detail": "Transport, Marlon" }
+        ]
+      },
+      "recruitment": {
+        "summary_kpis": {
+          "review_rate": {
+            "value": "56.2%",
+            "subValue": "Apply to Interview",
+            "target": "90%",
+            "trend": "down"
+          },
+          "interview_pass_rate": {
+            "value": "96.3%",
+            "subValue": "Offer / Interview",
+            "target": "75%",
+            "trend": "up"
+          },
+          "offer_acceptance_rate": {
+            "value": "100.0%",
+            "subValue": "Signed / Offered",
+            "target": "50%",
+            "trend": "up"
+          }
+        },
+        "original_stats": {
+          "unreviewed_applicants": {
+            "value": "4",
+            "subValue": "Action Required (New)"
+          },
+          "interviews_scheduled": {
+            "value": "27",
+            "subValue": "Total Scheduled"
+          },
+          "pending_onboarding": {
+            "value": "9",
+            "subValue": "Documents Signed"
+          },
+          "avg_response_time": {
+            "value": "1.0d",
+            "subValue": "Apply to Interview Avg"
+          }
+        },
+        "performance_goals": [
+          {
+            "label": "Interviews",
+            "current": 27,
+            "target": 15,
+            "unit": "",
+            "status": "on-track"
+          },
+          {
+            "label": "Onboarding",
+            "current": 9,
+            "target": 5,
+            "unit": "",
+            "status": "on-track"
+          },
+          {
+            "label": "Response Time",
+            "current": 1.0,
+            "target": 0.5,
+            "unit": "d",
+            "status": "behind",
+            "reverse": true
+          }
+        ],
+        "ai_insights": [
+          {
+            "type": "warning",
+            "text": "Applicant conversion to interview is low (56.2%) and below the 90% target. Review top-of-funnel screening."
+          },
+          {
+            "type": "up",
+            "text": "Interview Pass Rate is exceptional (96.3%). Candidate quality is currently high."
+          },
+          {
+            "type": "warning",
+            "text": "Critical: Offer Acceptance is 100.0% (26 offers) but Hires are 0. Investigate the final steps of the hiring process (e.g., background checks, final paperwork)."
+          }
+        ],
+        "funnel": [
+          {
+            "step": "Applicants",
+            "value": 48
+          },
+          {
+            "step": "Interviews",
+            "value": 27
+          },
+          {
+            "step": "Offers",
+            "value": 26
+          },
+          {
+            "step": "Hires",
+            "value": 0
+          }
+        ],
+        "weekly_trends": [
+          { "date": "09/28", "applications": 2 },
+          { "date": "10/05", "applications": 10 },
+          { "date": "10/12", "applications": 5 },
+          { "date": "10/19", "applications": 7 },
+          { "date": "10/26", "applications": 10 },
+          { "date": "11/02", "applications": 6 },
+          { "date": "11/09", "applications": 3 },
+          { "date": "11/16", "applications": 1 },
+          { "date": "11/23", "applications": 2 },
+          { "date": "11/30", "applications": 1 }
+        ],
+        "status_breakdown": [
+          { "status": "Sent Documents", "count": 12 },
+          { "status": "Documents Signed", "count": 9 },
+          { "status": "Initial Contact Attempted", "count": 7 },
+          { "status": "In Communication", "count": 7 },
+          { "status": "New", "count": 4 },
+          { "status": "Interview Scheduled", "count": 2 },
+          { "status": "3rd Contact Attempted", "count": 2 },
+          { "status": "Sent Application", "count": 1 }
+        ],
+        "role_efficiency": {
+          "breakdown": [
+            { "role": "Caregiver", "hours": 24.0, "applicants": 37, "emails": 59, "texts": 53 },
+            { "role": "Backup Childcare Provider", "hours": 617.4, "applicants": 11, "emails": 10, "texts": 60 }
+          ],
+          "total": {
+            "role": "Total",
+            "hours": 641.4,
+            "applicants": 48,
+            "emails": 69,
+            "texts": 113
+          }
+        }
+      }
+    };
+    
+    // ----------------------------------------------------
+    // JAVASCRIPT RENDERING LOGIC
+    // ----------------------------------------------------
+    const getTrendIcon = (trend) => {
+        if (trend === 'up') return '<span class="trend-icon up">▲</span>';
+        if (trend === 'down') return '<span class="trend-icon down">▼</span>';
+        return '<span class="trend-icon neutral">◼</span>';
+    };
+
+    const renderKPIs = (data, containerId) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        let html = '';
+        for (const key in data) {
+            const kpi = data[key];
+            html += `
+                <div class="kpi-card">
+                    <span class="kpi-value">${kpi.value} ${kpi.trend ? getTrendIcon(kpi.trend) : ''}</span>
+                    <span class="kpi-subvalue">${kpi.subValue}</span>
                 </div>
             `;
-
-            lucide.createIcons();
-            initCharts(data);
         }
+        container.innerHTML = html;
+    };
+    
+    const renderGoals = (data, containerId) => {
+        const tbody = document.querySelector(`#${containerId} tbody`);
+        if (!tbody) return;
+        
+        tbody.innerHTML = data.map(goal => `
+            <tr>
+                <td>${goal.label}</td>
+                <td class="current-val">${goal.current}${goal.unit}</td>
+                <td>${goal.target}${goal.unit}</td>
+                <td class="status-${goal.status}">${goal.status.toUpperCase().replace('-', ' ')}</td>
+            </tr>
+        `).join('');
+    };
 
-        // ---------------------------------------------------------
-        // Chart Configuration (Apple Style)
-        // ---------------------------------------------------------
-        function initCharts(data) {
-            // Global Chart Defaults
-            Chart.defaults.font.family = "Inter";
-            Chart.defaults.color = "#86868B";
-            Chart.defaults.scale.grid.color = "#F5F5F7";
-            
-            const appleColors = {
-                blue: '#007AFF', orange: '#FF9500', green: '#34C759', 
-                navy: '#002F5D', red: '#FF3B30', gray: '#8E8E93'
-            };
+    const renderInsights = (data, containerId) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        container.innerHTML = data.map(insight => `
+            <div class="ai-insights ${insight.type}">${insight.text}</div>
+        `).join('');
+    };
 
-            const commonOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        titleColor: '#000',
-                        bodyColor: '#666',
-                        borderColor: 'rgba(0,0,0,0.05)',
-                        borderWidth: 1,
-                        padding: 12,
-                        cornerRadius: 12,
-                        displayColors: true,
-                        boxPadding: 4
-                    }
-                }
-            };
+    const renderBreakdownList = (data, containerId, labelKey = 'status', valueKey = 'count') => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        container.innerHTML = data.map(item => `
+            <li>
+                <span class="breakdown-label">${item[labelKey]}</span>
+                <span>${item[valueKey]}</span>
+            </li>
+        `).join('');
+    };
 
-            if (activeTab === 'recruitment') {
-                // Area Chart
-                new Chart(document.getElementById('trendChart'), {
-                    type: 'line',
-                    data: {
-                        labels: data.weekly_trends.map(d => d.date),
-                        datasets: [{
-                            data: data.weekly_trends.map(d => d.applications),
-                            borderColor: appleColors.orange,
-                            borderWidth: 3,
-                            backgroundColor: (ctx) => {
-                                const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
-                                gradient.addColorStop(0, 'rgba(243, 111, 33, 0.15)');
-                                gradient.addColorStop(1, 'rgba(243, 111, 33, 0)');
-                                return gradient;
-                            },
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0,
-                            pointHoverRadius: 6,
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: appleColors.orange,
-                            pointHoverBorderWidth: 3
-                        }]
-                    },
-                    options: {
-                        ...commonOptions,
-                        scales: {
-                            y: { border: { display: false }, grid: { borderDash: [4, 4], drawBorder: false } },
-                            x: { grid: { display: false }, border: { display: false } }
-                        }
-                    }
-                });
+    const renderFunnel = (data, containerId) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        container.innerHTML = data.map(item => `
+            <div class="funnel-step">
+                <span>${item.step}</span>
+                <span>${item.value}</span>
+            </div>
+        `).join('');
+    };
+    
+    const renderActivityLog = (data, containerId) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        container.innerHTML = data.map(item => `
+            <li>
+                <span class="breakdown-label">${item.date} - ${item.action}</span>
+                <span>${item.detail}</span>
+            </li>
+        `).join('');
+    };
 
-                // Funnel Chart
-                new Chart(document.getElementById('funnelChart'), {
-                    type: 'bar',
-                    data: {
-                        labels: data.funnel.map(d => d.step),
-                        datasets: [{
-                            data: data.funnel.map(d => d.value),
-                            backgroundColor: [appleColors.navy, appleColors.blue, appleColors.green, appleColors.orange],
-                            borderRadius: 6,
-                            barThickness: 24
-                        }]
-                    },
-                    options: {
-                        ...commonOptions,
-                        indexAxis: 'y',
-                        scales: { x: { display: false }, y: { grid: { display: false }, border: { display: false } } }
-                    }
-                });
 
-                // Status Doughnut
-                new Chart(document.getElementById('statusChart'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: data.status_breakdown.map(d => d.status),
-                        datasets: [{
-                            data: data.status_breakdown.map(d => d.count),
-                            backgroundColor: [
-                                appleColors.navy, appleColors.orange, appleColors.blue, appleColors.green, 
-                                appleColors.red, '#AF52DE', '#5AC8FA', '#8E8E93'
-                            ],
-                            borderWidth: 0,
-                            hoverOffset: 5
-                        }]
-                    },
-                    options: {
-                        ...commonOptions,
-                        cutout: '75%',
-                        plugins: { legend: { display: true, position: 'right', labels: { boxWidth: 8, usePointStyle: true, font: {size: 10} } } }
-                    }
-                });
-            } else {
-                // Service Mix
-                new Chart(document.getElementById('serviceChart'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: data.service_mix.map(d => d.status),
-                        datasets: [{
-                            data: data.service_mix.map(d => d.count),
-                            backgroundColor: [appleColors.navy, appleColors.orange, appleColors.green, appleColors.blue],
-                            borderWidth: 0,
-                            hoverOffset: 5
-                        }]
-                    },
-                    options: {
-                        ...commonOptions,
-                        cutout: '75%',
-                        plugins: { legend: { display: true, position: 'right', labels: { boxWidth: 8, usePointStyle: true, font: {size: 11} } } }
-                    }
-                });
+    const renderDashboard = () => {
+        // 1. Header
+        document.getElementById('dashboard-title').textContent = dashboardData.header.title;
+        document.getElementById('dashboard-date-range').textContent = dashboardData.header.date_range;
+        
+        // 2. Scheduling Section
+        const scheduling = dashboardData.scheduling;
+        renderKPIs(scheduling.summary_kpis, 'scheduling-summary-kpis');
+        renderKPIs(scheduling.original_stats, 'scheduling-original-stats');
+        renderGoals(scheduling.performance_goals, 'scheduling-goals-table');
+        renderInsights(scheduling.ai_insights, 'scheduling-ai-insights');
+        renderBreakdownList(scheduling.clock_compliance_breakdown, 'scheduling-clock-breakdown');
+        renderBreakdownList(scheduling.service_mix, 'scheduling-service-mix');
+        renderActivityLog(scheduling.activity_log, 'scheduling-activity-log');
 
-                // Compliance Bar
-                new Chart(document.getElementById('complianceChart'), {
-                    type: 'bar',
-                    data: {
-                        labels: data.clock_compliance_breakdown.map(d => d.status),
-                        datasets: [{
-                            data: data.clock_compliance_breakdown.map(d => d.count),
-                            backgroundColor: [appleColors.green, appleColors.red, appleColors.orange, appleColors.blue],
-                            borderRadius: 8,
-                            maxBarThickness: 40
-                        }]
-                    },
-                    options: {
-                        ...commonOptions,
-                        scales: { y: { border: { display: false }, grid: { borderDash: [4, 4] } }, x: { grid: { display: false }, border: { display: false } } }
-                    }
-                });
-            }
-        }
+        // 3. Recruitment Section
+        const recruitment = dashboardData.recruitment;
+        renderKPIs(recruitment.summary_kpis, 'recruitment-summary-kpis');
+        renderKPIs(recruitment.original_stats, 'recruitment-original-stats');
+        renderGoals(recruitment.performance_goals, 'recruitment-goals-table');
+        renderInsights(recruitment.ai_insights, 'recruitment-ai-insights');
+        renderFunnel(recruitment.funnel, 'recruitment-funnel');
+        renderBreakdownList(recruitment.status_breakdown, 'recruitment-status-breakdown');
+        
+        // Note: Weekly trends and Role efficiency breakdown need a charting library (e.g., Chart.js) 
+        // for proper visualization, but the data is available in the object.
+    };
 
-        renderDashboard();
-    </script>
+    // Initialize dashboard rendering when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', renderDashboard);
+</script>
+
 </body>
 </html>
